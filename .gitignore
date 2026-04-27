@@ -1,0 +1,33 @@
+# Binaries and build output
+/message-fixer-bot
+/bin/
+/dist/
+/build/
+
+# Go test and coverage output
+*.test
+*.out
+coverage.html
+
+# Dependency and workspace caches
+/vendor/
+/.cache/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Temporary voice files
+*.oga
+*.ogg
+*.opus
+/tmp/
+/work/
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
