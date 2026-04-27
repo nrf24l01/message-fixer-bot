@@ -1,0 +1,63 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/nrf24l01/message-fixer-bot/bot
+  tag: latest
+  pullPolicy: IfNotPresent
+
+xray:
+  image:
+    repository: ghcr.io/nrf24l01/message-fixer-bot/xray
+    tag: latest
+    pullPolicy: IfNotPresent
+  logLevel: warning
+  socksPort: 1080
+
+config:
+  telegramUpdateTimeout: 60
+  workDir: /tmp/message-fixer-bot
+
+secrets:
+  create: true
+  name: ""
+  telegramBotToken: ""
+  vlessUrl: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 65532
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65532
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 96Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+xrayResources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

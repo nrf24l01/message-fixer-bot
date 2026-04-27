@@ -1,0 +1,3 @@
+secrets:
+  telegramBotToken: "123456:telegram-bot-token"
+  vlessUrl: "vless://uuid@example.com:443?type=tcp&security=tls&encryption=none&sni=example.com#message-fixer-bot"

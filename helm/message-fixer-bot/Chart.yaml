@@ -1,0 +1,6 @@
+apiVersion: v2
+name: message-fixer-bot
+description: Telegram voice fixer bot with an Xray VLESS SOCKS5 sidecar
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

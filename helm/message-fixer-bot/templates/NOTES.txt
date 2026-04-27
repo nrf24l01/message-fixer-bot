@@ -1,0 +1,7 @@
+Message Fixer Bot has been installed.
+
+Check pods:
+  kubectl get pods -l app.kubernetes.io/instance={{ .Release.Name }}
+
+View logs:
+  kubectl logs deploy/{{ include "message-fixer-bot.fullname" . }} -c bot -f

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "message-fixer-bot.fullname" . }}
+  labels:
+    {{- include "message-fixer-bot.labels" . | nindent 4 }}
+data:
+  TELEGRAM_UPDATE_TIMEOUT: {{ .Values.config.telegramUpdateTimeout | quote }}
+  WORK_DIR: {{ .Values.config.workDir | quote }}
+  SOCKS5_PROXY: {{ printf "socks5://127.0.0.1:%v" .Values.xray.socksPort | quote }}
+  XRAY_LOG_LEVEL: {{ .Values.xray.logLevel | quote }}

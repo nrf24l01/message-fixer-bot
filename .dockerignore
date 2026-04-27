@@ -1,6 +1,8 @@
 .git/
 .gitignore
 Dockerfile
+docker-compose.yml
+helm/
 README.md
 AGENTS.md
 .env
