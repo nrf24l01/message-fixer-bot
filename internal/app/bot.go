@@ -187,19 +187,19 @@ func (b *Bot) handleMessage(ctx context.Context, msg *tgbotapi.Message) error {
 	defer os.Remove(outputPath)
 
 	log.Printf("running ffmpeg for message %d", msg.MessageID)
-	var err error
+	var processErr error
 	if command == "serious_fix" {
-		err = b.processor.MakeSerious(ctx, inputPath, outputPath)
+		processErr = b.processor.MakeSerious(ctx, inputPath, outputPath)
 	} else {
-		err = b.processor.MakeSqueaky(ctx, inputPath, outputPath)
+		processErr = b.processor.MakeSqueaky(ctx, inputPath, outputPath)
 	}
-	if err != nil {
-		log.Printf("ffmpeg failed for message %d: %v", msg.MessageID, err)
+	if processErr != nil {
+		log.Printf("ffmpeg failed for message %d: %v", msg.MessageID, processErr)
 		_, sendErr := b.api.Send(tgbotapi.NewMessage(msg.Chat.ID, "Could not process this voice message. Make sure ffmpeg is installed."))
 		if sendErr != nil {
-			return errors.Join(err, sendErr)
+			return errors.Join(processErr, sendErr)
 		}
-		return err
+		return processErr
 	}
 	log.Printf("created fixed voice at %s", outputPath)
 
