@@ -154,18 +154,20 @@ func replyToMessageID(msg *tgbotapi.Message) int {
 }
 
 func (b *Bot) handleMessage(ctx context.Context, msg *tgbotapi.Message) error {
-	if msg.Command() != "fix" {
+	command := msg.Command()
+	if command != "fix" && command != "serious_fix" {
 		return nil
 	}
-	log.Printf("received /fix in chat %d message %d", msg.Chat.ID, msg.MessageID)
+	log.Printf("received /%s in chat %d message %d", command, msg.Chat.ID, msg.MessageID)
 
 	voiceMsg := msg
 	if msg.ReplyToMessage != nil {
 		voiceMsg = msg.ReplyToMessage
 	}
 	if voiceMsg.Voice == nil {
-		log.Printf("/fix message %d has no voice target", msg.MessageID)
-		_, err := b.api.Send(tgbotapi.NewMessage(msg.Chat.ID, "Reply to a voice message with /fix."))
+		log.Printf("/%s message %d has no voice target", command, msg.MessageID)
+		prompt := fmt.Sprintf("Reply to a voice message with /%s.", command)
+		_, err := b.api.Send(tgbotapi.NewMessage(msg.Chat.ID, prompt))
 		return err
 	}
 
@@ -185,7 +187,13 @@ func (b *Bot) handleMessage(ctx context.Context, msg *tgbotapi.Message) error {
 	defer os.Remove(outputPath)
 
 	log.Printf("running ffmpeg for message %d", msg.MessageID)
-	if err := b.processor.MakeSqueaky(ctx, inputPath, outputPath); err != nil {
+	var err error
+	if command == "serious_fix" {
+		err = b.processor.MakeSerious(ctx, inputPath, outputPath)
+	} else {
+		err = b.processor.MakeSqueaky(ctx, inputPath, outputPath)
+	}
+	if err != nil {
 		log.Printf("ffmpeg failed for message %d: %v", msg.MessageID, err)
 		_, sendErr := b.api.Send(tgbotapi.NewMessage(msg.Chat.ID, "Could not process this voice message. Make sure ffmpeg is installed."))
 		if sendErr != nil {
